@@ -1,0 +1,3 @@
+[submodule "prologix-gpib-ethernet"]
+	path = prologix-gpib-ethernet
+	url = git@github.com:snhobbs/prologix-gpib-ethernet.git

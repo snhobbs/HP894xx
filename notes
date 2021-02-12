@@ -1,0 +1,44 @@
+Setup up a measurement from a config file
+Save settings to config
+take and save measurement to time stamped and labeled files in a determined directory
+Other calculations can be added on later
+
+Notes
+=====
+Use hard copy outputs?
+How to do setup of several machines in a single environment?
+
+Configuration Files
+===================
+Use a plain text editable file, using configparser with python3
+Use another config file for the general setup and one for a specific measurement
+this will allow for inheritance like behaviour
+
+General Config
+    - IP address of gpib controller
+    - port
+
+Device Config
+    - gpib address
+    - instrument name
+    - Generic gpib configuration
+    - device mode (like using interrupts)
+    - Set datetime SYSTem:DATE, SYSTem:TIME
+    - MMEMory:DATA will allow to and from a disk access over gpib
+    - SYSTem:BEEPer:STATe will allow beep to be turned off
+    - Start in default mode? SYSTem:PRESet -> store current settings for reapplying after complete?
+
+Measurement Config
+    - File name format with date time
+    - directory
+    - measurment type (intrrupt or poll)
+    - Data format
+    - Can take images using hard copy, tiff is settable with language
+
+Instrument Setup
+    - Use the config scripts and send out the data, make the sequence of commands
+    transparant to the user by logging all traffic in readable ways
+    - Query the installed features
+    - Optional startup test of hardware
+    - Calibration
+
