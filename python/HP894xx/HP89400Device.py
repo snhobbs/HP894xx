@@ -99,7 +99,6 @@ class HP89400Device(PrologixGPIBEthernetDevice):
     def GetXSpan(self):
         return self.query("SENS:FREQ:SPAN?")
 
-
     def clear_errors(self):
         self.write("*CLS")
 

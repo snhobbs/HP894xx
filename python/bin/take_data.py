@@ -1,8 +1,8 @@
-import plx_gpib_ethernet
 from time import sleep
 import datetime
 import click
 import os
+from HP894xx import HP89400Device
 duration = 0.5
 freq = 2000
 
@@ -34,13 +34,16 @@ def plot(name):
     plt.show()
 
 
-def setup_gpib():
-    gpib = plx_gpib_ethernet.PrologixGPIBEthernet("10.231.231.129", 3)
-    gpib.connect()
-    gpib.select(16)
-    return gpib
+def setup_gpib(ip):
+    address = 16
+    device = HP89400Device(address, ip, timeout=3)
+    print(device.address)
+    print(device.gpib.host)
+    device.connect()
+    device.setup();
+    return device
 
-def data_run(name):
+def data_run(ip, name):
     name = make_name(name)
     queries = [
         "SENS:FREQuency:STEP?",
@@ -69,19 +72,28 @@ def data_run(name):
         "CALC:DATA:HEAD:POINTS?",
         "CALC:FORMAT?"
     ]
-    gpib = setup_gpib()
+    gpib = setup_gpib(ip)
     #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % (duration, freq))
+
+    resps = []
+    for query in queries:
+        print(query)
+        sleep(0.1)
+        try:
+            value = gpib.query(query).strip()
+        except Exception as e:
+            print(e)
+            raise
+        resps.append(value)
+    delim=','
+    data = gpib.read_data().strip().strip(delim).split(delim)
 
     with open(name + ".dat", 'w') as f:
         f.write(f"# file_name: {name}\n")
         f.write(f"# date: {datetime.datetime.now().date()}\n")
         f.write(f"# time: {datetime.datetime.now().time()}\n")
-        for query in queries:
-            sleep(0.1)
-            print(query)
-            value = gpib.query(query).strip()
+        for query, value in zip(queries, resps):
             f.write(f"# {query}: {value}\n")
-        data = read_data(gpib, "CALC:DATA?")
         f.write("\n".join([str(pt) for pt in data]))
     plot(name)
     print(name)
@@ -89,11 +101,11 @@ def data_run(name):
     return None
 
 
-@click.option('--name', type=str, help='file name')
+@click.option('--ip', required=True, type=str, help='ip address')
+@click.option('--name', type=str, required=True, help='file name')
 @click.command()
-def take_data(name):
-    data_run(name)
-
+def take_data(ip, name):
+    data_run(ip, name)
 
 if __name__ == "__main__":
     take_data()
