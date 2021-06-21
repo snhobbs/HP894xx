@@ -1,5 +1,4 @@
 import plx_gpib_ethernet
-from matplotlib import pyplot as plt
 from time import sleep
 import datetime
 import click
@@ -28,6 +27,7 @@ def make_name(name):
 
 
 def plot(name):
+    from matplotlib import pyplot as plt
     with open(name + ".dat") as f:
         d = f.read().strip().split("\n")
         plt.plot([float(pt) for pt in d if len(pt.strip()) and "#" not in pt])

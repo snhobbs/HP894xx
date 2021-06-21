@@ -10,6 +10,7 @@ from enum import IntEnum
 from time import sleep
 import numpy as np
 
+'''
 class SocketDevice(object):
     def __init__(self, hostname : str, port):
         self.hostname = hostname
@@ -118,6 +119,7 @@ class EthernetGPIBBridge(SocketDevice):
     def SetGpibAddress(self, port: int) -> None:
         self.Write("++addr %d\n"%port)
         self.Write("++spoll\n")
+'''
 
 '''
 File Format is line number !${command}

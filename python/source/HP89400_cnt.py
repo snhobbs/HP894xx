@@ -1,8 +1,7 @@
 import click, logging, sys
-import LabAuto
-import numpy as np
 from time import sleep
 from timeout_decorator import timeout, TimeoutError
+from plx_gpib_ethernet import PrologixGPIBEthernetDevice
 _log = None
 
 """
@@ -16,31 +15,42 @@ GPIB commands that are passed through have a configurable line delimiter added b
 
 """
 
-class HP89400:
-    def __init__(self, bridge, gpib_address):
-        self.bridge = bridge
-        self.bridge.Flush()
-        self.bridge.SetGpibAddress(gpib_address)
+class HP89400Device(PrologixGPIBEthernetDevice):
+    def __init__(self, gpib_address):
+        super().__init__(gpib_address)
 
-    def Read(self):
-        return self.bridge.TimeoutRead()
+    def read_errors(self):
+        self.write("SYST:ERR?\r\n")
+        resp = (self.read())
+        return resp
 
-    def Write(self, arg):
-        return self.bridge.Write(arg)
+    def read_data(self):
+        self.write("CALC:DATA?\r\n")
+        return self.read()
+
+    def read_tiff(self):
+        self.write("HCOP:DEV:LANG tiff")
+        self.write("HCOP:DATA?\r\n")
+        blob = self.read()
+        return blob[2:]#FIXME bad first 2 bytes
+
+    def clear(self):
+        self.write("*CLS")
+
 
     def RunCommands(self, commands):
         for line, command in enumerate(commands):
             logging.getLogger().info("%d: %s"%(line, command))
-            self.Write(command + "\n")
+            self.write(command + "\n")
             sleep(0.05)
             if '?' in command:
-                _log.info(self.Read())
+                _log.info(self.read())
 
             if(test):
-                self.Write("SYST:ERR?\r\n")
-                resp = (self.Read())
+                resp = self.read_errors()
                 assert(b'0' in resp[:3])
 
+'''
     @timeout(2)
     def SendGpibCommand(self, command):
         log = logging.getLogger()
@@ -60,16 +70,6 @@ class HP89400:
                 log.warn("Gpib Send Command Error {}".format(e))
                 self.ClearGpibErrors()
                 continue
-
-    @timeout(2)
-    def ClearDataBuffer(self):
-        log = logging.getLogger()
-        while True:
-            discard = self.Read()
-            if discard is None:
-                break
-            else:
-                log.info("Data in buffer: %s"%discard)
 
     @timeout(2)
     def SendGpibQuery(self, command):
@@ -97,9 +97,7 @@ class HP89400:
     def ReadGpibState(self):
         while(True):
             self.ClearDataBuffer()
-            self.Write("syst:err?\r\n")
-            sleep(0.1)
-            response = self.Read()
+            response = self.read_errors()
             if response is not None:
                 break
         return response
@@ -122,7 +120,7 @@ class HP89400:
                     no_errors = True
             except (ValueError, TimeoutError):
                 pass
-
+'''
 
 @click.group()
 @click.option('--config', multiple = True, type=str, required=True, help='Config files, multiple accepted')
@@ -139,20 +137,19 @@ def LoadSetup(ctx, command_file, test):
     commands = LabAuto.ParseHPCommandFile(command_file)
 
     config = ctx.obj['config']
-    with LabAuto.EthernetGPIBBridge(config['tcpip']['hostname'], config['tcpip']['port']) as bridge:
-        hp_device = HP89400(bridge, gpib_port = int(config['gpib']['port']))
+    with HP89400Device(int(config['gpib']['port']), config['tcpip']['hostname'], config['tcpip']['port']) as hp_device:
         setup_commands = [pt[1] for pt in config['prologix_commands'].items()]
 
-        _log.info(bridge.GetVersion())
-        _log.info(hp_device.SendGpibQuery("*IDN?"))
-        hp_device.SendGpibCommand("*CLS")
-        _log.info(hp_device.SendGpibQuery("FORM?"))
-        _log.info(hp_device.SendGpibQuery("FORM:DATA?"))
+        _log.info(hp_device.idn())
+        hp_device.write("*CLS")
+        _log.info(hp_device.query("FORM?"))
+        _log.info(hp_device.query("FORM:DATA?"))
 
         _log.info("#"*50)
         _log.info("\t\tSetup Device")
         _log.info("#"*50)
-        hp_device.Setup(setup_commands)
+        #hp_device.Setup(setup_commands)
+        hp_device.RunCommands(setup_commands)
 
         '''
         bridge.Write("INP1:IMP 50\r\n")
@@ -180,11 +177,8 @@ def LoadSetup(ctx, command_file, test):
 @click.option('--filename', '-f', type=str, default='gpib_data.tiff', help='filename to save image to')
 def SaveTiff(ctx, filename):
     config = ctx.obj['config']
-    with LabAuto.EthernetGPIBBridge(config['tcpip']['hostname'], config['tcpip']['port']) as bridge:
-        hp_device = HP89400(bridge, gpib_port = int(config['gpib']['port']))
-        hp_device.SendGpibCommand("HCOP:DEV:LANG tiff")
-        bridge.Write("HCOP:DATA?\r\n")
-        tiff = (bridge.ReadBlob())[2:]#FIXME bad first 2 bytes
+    with HP89400Device(int(config['gpib']['port']), config['tcpip']['hostname'], config['tcpip']['port']) as hp_device:
+        tiff = hp_device.read_tiff()
         with open(filename, "+wb") as f:
             f.write(tiff)
 
@@ -193,9 +187,8 @@ def SaveTiff(ctx, filename):
 @click.option('--filename', '-f', type=str, default='gpib_data.csv', help='filename to save data to')
 def SaveData(ctx, filename):
     config = ctx.obj['config']
-    with LabAuto.EthernetGPIBBridge(config['tcpip']['hostname'], config['tcpip']['port']) as bridge:
-        bridge.Write("CALC:DATA?\r\n")
-        data = (bridge.ReadBlob())
+    with HP89400Device(int(config['gpib']['port']), config['tcpip']['hostname'], config['tcpip']['port']) as hp_device:
+        data = hp_device.read_data()
         with open(filename, "+wb") as f:
             f.write(data)
 
