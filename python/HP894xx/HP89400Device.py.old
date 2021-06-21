@@ -1,42 +1,78 @@
-import logging
-from time import sleep
-import numpy as np
-from timeout_decorator import timeout
-import timeout_decorator
-
-"""
-HP GPIB Device
--> 2 types of commands:
-    1) Ethernet-GPIB bridge meta commands
-    2) GPIB control commands
-Bridge commands have different delimiters for lines, newlines and returns might be stripped? FIXME
-GPIB commands that are passed through have a configurable line delimiter added by the bridge
-
-
-"""
 
 '''
-File Format is line number !${command}
-The first 3 lines are meta data
+    @timeout(2)
+    def SendGpibCommand(self, command):
+        log = logging.getLogger()
+        assert("?" not in command)
+        log.info(command)
+        while(True):
+            self.ClearDataBuffer()
+            sleep(0.1)
+            self.write(command + "\r\n")
+            sleep(0.1)
+            status_response = self.ReadGpibState()
+            log.info("%s\tResponse: %s"%(command, status_response))
+            try:
+                if ReadGpibStatusCode(status_response) == 0:
+                    break
+            except (TypeError, ValueError) as e:
+                log.warn("Gpib Send Command Error {}".format(e))
+                self.ClearGpibErrors()
+                continue
+
+    @timeout(2)
+    def SendGpibQuery(self, command):
+        log = logging.getLogger()
+        log.info(command)
+        assert("?" in command)
+        while(True):
+            self.ClearDataBuffer()
+            sleep(0.1)
+            self.write(command + "\r\n")
+            sleep(0.1)
+            response = self.Read("eoi")
+            sleep(0.1)
+            status_response = self.ReadGpibState()
+            log.info("%s\t%s\tstatus: %s"%(command, response, status_response))
+            try:
+                if self.ReadGpibStatusCode(status_response) == 0:
+                    break
+            except (TypeError, ValueError) as e:
+                log.warn(e)
+                self.ClearGpibErrors()
+        return response
+
+    @timeout(5)
+    def ReadGpibState(self):
+        while(True):
+            self.ClearDataBuffer()
+            response = self.read_errors()
+            if response is not None:
+                break
+        return response
+
+    def ReadGpibStatusCode(self, response):
+        resp_str = response.decode("utf-8")
+        resp_code = int(resp_str.split(',')[0])
+        log = logging.getLogger()
+        log.info("Status Code %d, %s"%(resp_code, resp_str))
+        return resp_code
+
+    @timeout(5)
+    def ClearGpibErrors(self):
+        no_errors = False
+        while(not no_errors):
+            try:
+                resp = self.ReadGpibState()
+                code = self.ReadGpibStatusCode(resp)
+                if(code == 0):
+                    no_errors = True
+            except (ValueError, TimeoutError):
+                pass
 '''
-MEASUREMENT_FINISH_SLEEP_TIME = 0
-DATA_READ_SLEEP_TIME = 0
-#MEASUREMENT_FINISH_SLEEP_TIME = 0.05
-#DATA_READ_SLEEP_TIME = 0.1
 
-def ParseHPCommandFile(fname):
-    kMetaDataRows = 3
-    lines = np.loadtxt(fname, skiprows=kMetaDataRows, delimiter="!", dtype=str, unpack=True)
-    logging.getLogger().info(lines)
-    return lines[1]
 
-def ReadStatusCode(response):
-    resp_str = response.decode("utf-8")
-    resp_code = int(resp_str.split(',')[0])
-    log = logging.getLogger()
-    #log.info("Status Code %d, %s"%(resp_code, resp_str))
-    return resp_code
-
+'''
 class HPDevice:
     def __init__(self, bridge, gpib_address):
         self.bridge = bridge
@@ -48,16 +84,16 @@ class HPDevice:
         return self.bridge.AsciiRead()
 
     def Write(self, arg):
-        return self.bridge.Write("%s\n"%arg.strip())
+        return self.bridge.write("%s\n"%arg.strip())
 
     def RunCommands(self, commands):
         for line, command in enumerate(commands):
             command = command.strip()
             logging.getLogger().info("%d: %s"%(line, command))
             if "?" in command:
-                self.SendQuery(command)
+                self.query(command)
             else:
-                self.SendCommand(command)
+                self.write(command)
 
     def SetupBridgeCommunication(self, gpib_address: int):
         self.bridge.Flush()
@@ -90,7 +126,7 @@ class HPDevice:
         assert("?" not in command)
         while True:
             # self.ClearDataBuffer()
-            self.Write(command)
+            self.write(command)
             status_response = self.ReadState()
             #log.info("%s\tResponse: %s"%(command, status_response))
             try:
@@ -100,13 +136,13 @@ class HPDevice:
                 log.warning("Gpib Send Command Error {}".format(error))
                 self.ClearErrors()
     @timeout(2)
-    def SendQuery(self, command):
+    def query(self, command):
         log = logging.getLogger()
         #log.info(command)
         # assert("?" in command)
         while True:
             self.ClearDataBuffer()
-            self.Write(command)
+            self.write(command)
             response = self.Read()
             status_response = self.ReadState()
             #log.info("%s\t%s\tstatus: %s"%(command, response, status_response))
@@ -126,7 +162,7 @@ class HPDevice:
     def ReadState(self):
         while True:
             # self.ClearDataBuffer()
-            self.Write("syst:err?")
+            self.write("syst:err?")
             response = self.Read()
             if response is not None:
                 break
@@ -160,7 +196,7 @@ class HP89400(HPDevice):
         self.SendCommand("SENS:VOLT:RANGE:AUTO ONCE")
         logging.getLogger().info("Auto Range")
         while True:
-            resp = self.SendQuery("STAT:OPER:COND?")
+            resp = self.query("STAT:OPER:COND?")
             logging.getLogger().info("Status {} {}".format(self.ReadState(), resp))
             try:
                 if (int(resp) & (1<<2)) == 0:
@@ -172,7 +208,7 @@ class HP89400(HPDevice):
     #    super().Setup()
     #    self.SendCommand("*CLS")
     #    self.SendCommand("SENS:VOLT:RANGE:AUTO 0")
-    #    #gpib.Write("SENS:VOLT:RANGE:AUTO ONCE")
+    #    #gpib.write("SENS:VOLT:RANGE:AUTO ONCE")
     #    self.SendCommand("cont")
 
     def SetupMeasurement(self):
@@ -182,7 +218,7 @@ class HP89400(HPDevice):
         self.SendCommand("abor")
 
     def GetReadDataPoints(self):
-        return self.SendQuery("SENS:AVER:COUN:INT?")
+        return self.query("SENS:AVER:COUN:INT?")
 
     @timeout(30)
     def WaitForMeasurementToFinish(self, kAverageDataPoints):
@@ -205,7 +241,7 @@ class HP89400(HPDevice):
         return data
 
     def StartDataRead(self):
-        self.Write("CALC:DATA?")
+        self.write("CALC:DATA?")
 
     def ReadConfiguration(self):
         self.xunits = self.GetXUnits()
@@ -215,20 +251,20 @@ class HP89400(HPDevice):
         #self.data_length = self.GetDataLength()
 
     def GetDataLength(self):
-        return int(self.SendQuery("CALC:DATA:HEAD:POIN?"))
+        return int(self.query("CALC:DATA:HEAD:POIN?"))
 
     def GetYUnits(self):
-        #gpib.Write("CALC:UNIT:AM?\r\n")
-        return self.SendQuery("CALC:UNIT:POW?")
+        #gpib.write("CALC:UNIT:AM?\r\n")
+        return self.query("CALC:UNIT:POW?")
 
     def GetXUnits(self):
-        return self.SendQuery("CALC:X:UNIT:FREQ?")
+        return self.query("CALC:X:UNIT:FREQ?")
 
     def GetXCenter(self):
-        return self.SendQuery("SENS:FREQ:CENT?")
+        return self.query("SENS:FREQ:CENT?")
 
     def GetXSpan(self):
-        return self.SendQuery("SENS:FREQ:SPAN?")
+        return self.query("SENS:FREQ:SPAN?")
 
 class DummyHP89400(object):
     def __init__(self, bridge, gpib_address):
@@ -251,7 +287,7 @@ class DummyHP89400(object):
     def SendCommand(self, command):
         pass
 
-    def SendQuery(self, command):
+    def query(self, command):
         pass
 
     def ClearDataBuffer(self):
@@ -295,3 +331,4 @@ class DummyHP89400(object):
 
     def GetXSpan(self):
         return b"10e6"
+'''
