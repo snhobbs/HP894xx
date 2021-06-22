@@ -106,6 +106,9 @@ def data_run(ip, name):
 @click.command()
 def take_data(ip, name):
     data_run(ip, name)
+    hp_device.SetupMeasurement()
+    data = hp_device.ReadAnalyzerData()
+
 
 if __name__ == "__main__":
     take_data()

@@ -3,7 +3,7 @@ from time import sleep
 import numpy as np
 from timeout_decorator import timeout
 import timeout_decorator
-
+import socket
 """
 HP GPIB Device
 -> 2 types of commands:
@@ -43,16 +43,15 @@ from plx_gpib_ethernet import PrologixGPIBEthernetDevice
 _log = None
 test=False
 
-"""
+'''
 HP GPIB Device
 -> 2 types of commands:
     1) Ethernet-GPIB bridge meta commands
     2) GPIB control commands
 Bridge commands have different delimiters for lines, newlines and returns might be stripped? FIXME
 GPIB commands that are passed through have a configurable line delimiter added by the bridge
-
-
-"""
+'''
+import time
 class HP89400Device(PrologixGPIBEthernetDevice):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -62,25 +61,51 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.freq_span = None
 
     def __enter__(self):
+        print("Open Socket", time.time())
         self.connect()
+        print("Socket Opened", time.time())
         return self
 
     def __exit__(self, *args, **kwargs):
+        print("Close Socket", time.time())
         self.close()
+        print("Socket Closed ", time.time())
+
+    @classmethod
+    def get_error_code(cls, error):
+        return int(str(error[:3]).strip(','))
+
+    def reset(self):
+        self.close()
+        self.gpib = PrologixGPIBEthernet(self.gpib.host, self.gpib.timeout)
+        self.connect()
+
+    def write(self, *args, **kwargs):
+        print(*args, **kwargs)
+        super().write(*args, **kwargs)
+        #error = self.read_errors()
+        #if(self.get_error_code(error) != 0):
+        #    logging.getLogger().info(error)
+        #    assert(self.get_error_code(error) == 0)
+        #return resp
+    def query(self, *args, **kwargs):
+        print(*args, **kwargs)
+        return super().query(*args, **kwargs)
+
+    def read_error_code(self):
+        return self.get_error_code(self.read_errors())
 
     def read_errors(self):
-        self.write("SYST:ERR?\r\n")
-        resp = (self.read())
-        return resp
+        return self.query("SYST:ERR?\r\n").strip()
 
     def read_data(self):
-        self.write("CALC:DATA?\r\n")
-        return self.read()
+        return self.query("CALC:DATA?\r\n")
+        #self.write("CALC:DATA?\r\n")
+        #return self.read()
 
     def read_tiff(self):
         self.write("HCOP:DEV:LANG tiff")
-        self.write("HCOP:DATA?\r\n")
-        blob = self.read()
+        blob = self.query("HCOP:DATA?\r\n")
         return blob[2:]#FIXME bad first 2 bytes
 
     def GetDataLength(self):
@@ -103,9 +128,16 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.write("*CLS")
 
     def abort(self):
-        self.write("abor")
+        #super().write("abor")
+        while True:
+            try:
+                super().write("abor")
+                break
+            except socket.timeout:
+                continue
 
     def setup(self):
+        self.clear_errors()
         # read until eoi is recieved
         # no eoi signal at last character
         self.write("++eoi 1")
@@ -136,12 +168,17 @@ class HP89400Device(PrologixGPIBEthernetDevice):
                 resp = self.read_errors()
                 assert(b'0' in resp[:3])
 
+    def get_operating_condition(self):
+        resp = int(self.query("STAT:OPER:COND?"))
+        return resp
+
     @timeout(30)
     def AutoRangeBlocking(self):
         self.write("SENS:VOLT:RANGE:AUTO ONCE")
         logging.getLogger().info("Auto Range")
+        sleep(1)
         while True:
-            resp = self.query("STAT:OPER:COND?")
+            resp = self.get_operating_condition() 
             logging.getLogger().info("Status {} {}".format(self.read_errors(), resp))
             try:
                 if (int(resp) & (1<<2)) == 0:
@@ -149,37 +186,11 @@ class HP89400Device(PrologixGPIBEthernetDevice):
             except (ValueError, TypeError) as error:
                 logging.getLogger().warning(error)
 
-    def SetupMeasurement(self):
-        self.write("SENS:VOLT:RANGE:AUTO 0")
-        self.AutoRangeBlocking()
-        logging.getLogger().info(self.read_errors())
-        self.abort()
+    def enable_autorange(self, setting):
+        self.write("SENS:VOLT:RANGE:AUTO {}".format(int(setting)))
 
     def GetReadDataPoints(self):
         return int(self.query("SENS:AVER:COUN:INT?"))
-
-    @timeout(30)
-    def WaitForMeasurementToFinish(self, kAverageDataPoints):
-        while True:
-            sleep(MEASUREMENT_FINISH_SLEEP_TIME)
-            counts = self.GetReadDataPoints()
-            logging.getLogger().info("Data Points: {}/{}".format(counts, kAverageDataPoints))
-            try:
-                if int(counts) >= kAverageDataPoints:
-                    break
-            except TypeError:
-                pass
-
-    @timeout(30)
-    def ReadAnalyzerData(self):
-        self.StartDataRead()
-        sleep(DATA_READ_SLEEP_TIME)
-        data = bytearray()
-        #data.extend(self.bridge.ReadBlob())
-        ret = self.read()
-        print(ret, type(ret))
-        data.extend(bytes(ret, "utf-8"))
-        return data
 
     def StartDataRead(self):
         self.write("CALC:DATA?")
@@ -191,4 +202,3 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.freq_span = self.GetXSpan()
         #self.data_length = self.GetDataLength()
 
-    
