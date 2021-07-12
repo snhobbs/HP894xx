@@ -3,22 +3,8 @@ import datetime
 import click
 import os
 from HP894xx import HP89400Device
-duration = 0.5
-freq = 2000
-
-def read_data(gpib, arg):
-    data = []
-    gpib.write(arg)
-    for i in range(1):
-        while True:
-            try:
-                data.extend(gpib.read())
-                sleep(0.1)
-            except Exception as e:
-                print(e, i)
-                break
-    d = "".join(data).strip().split(",")
-    return [float(pt) for pt in d if len(pt.strip())]
+#duration = 0.5
+#freq = 2000
 
 
 def make_name(name):
@@ -30,7 +16,7 @@ def plot(name):
     from matplotlib import pyplot as plt
     with open(name + ".dat") as f:
         d = f.read().strip().split("\n")
-        plt.plot([float(pt) for pt in d if len(pt.strip()) and "#" not in pt])
+        plt.semilogy([float(pt) for pt in d if len(pt.strip()) and "#" not in pt])
     plt.show()
 
 
@@ -43,8 +29,7 @@ def setup_gpib(ip):
     device.setup();
     return device
 
-def data_run(ip, name):
-    name = make_name(name)
+def read_configuration(hp_device):
     queries = [
         "SENS:FREQuency:STEP?",
         "FREQuency:STARt?",
@@ -72,43 +57,36 @@ def data_run(ip, name):
         "CALC:DATA:HEAD:POINTS?",
         "CALC:FORMAT?"
     ]
-    gpib = setup_gpib(ip)
-    #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % (duration, freq))
-
     resps = []
     for query in queries:
         print(query)
         sleep(0.1)
         try:
-            value = gpib.query(query).strip()
+            value = hp_device.query(query).strip()
         except Exception as e:
             print(e)
             raise
         resps.append(value)
-    delim=','
-    data = gpib.read_data().strip().strip(delim).split(delim)
-
-    with open(name + ".dat", 'w') as f:
-        f.write(f"# file_name: {name}\n")
-        f.write(f"# date: {datetime.datetime.now().date()}\n")
-        f.write(f"# time: {datetime.datetime.now().time()}\n")
-        for query, value in zip(queries, resps):
-            f.write(f"# {query}: {value}\n")
-        f.write("\n".join([str(pt) for pt in data]))
-    plot(name)
-    print(name)
-    gpib.close()
-    return None
+    return queries, resps
 
 
 @click.option('--ip', required=True, type=str, help='ip address')
 @click.option('--name', type=str, required=True, help='file name')
 @click.command()
 def take_data(ip, name):
-    data_run(ip, name)
-    hp_device.SetupMeasurement()
-    data = hp_device.ReadAnalyzerData()
+    hp_device = setup_gpib(ip)
+    queries, resps = read_configuration(hp_device)
+    data = hp_device.read_data()
+    fname = make_name(name)
 
+    with open(fname+".dat", 'w') as f:
+        f.write(f"# file_name: {name}\n")
+        f.write(f"# date: {datetime.datetime.now().date()}\n")
+        f.write(f"# time: {datetime.datetime.now().time()}\n")
+        for query, value in zip(queries, resps):
+            f.write(f"# {query}: {value}\n")
+        f.write("\n".join([str(pt) for pt in data]))
+    plot(fname)
 
 if __name__ == "__main__":
     take_data()

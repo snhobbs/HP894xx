@@ -178,7 +178,7 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         logging.getLogger().info("Auto Range")
         sleep(1)
         while True:
-            resp = self.get_operating_condition() 
+            resp = self.get_operating_condition()
             logging.getLogger().info("Status {} {}".format(self.read_errors(), resp))
             try:
                 if (int(resp) & (1<<2)) == 0:
@@ -195,6 +195,21 @@ class HP89400Device(PrologixGPIBEthernetDevice):
     def StartDataRead(self):
         self.write("CALC:DATA?")
 
+    def read_data(self):
+        data = []
+        self.StartDataRead()
+        for i in range(1):
+            while True:
+                try:
+                    data.extend(self.read())
+                    sleep(0.1)
+                except Exception as e:
+                    print(e, i)
+                    break
+        delim=','
+        d = "".join(data).strip().strip(delim).split(delim)
+        return [float(pt) for pt in d if len(pt.strip())]
+
     def ReadConfiguration(self):
         self.xunits = self.GetXUnits()
         self.yunits = self.GetYUnits()
@@ -202,3 +217,64 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.freq_span = self.GetXSpan()
         #self.data_length = self.GetDataLength()
 
+'''
+def data_run(ip, name):
+    name = make_name(name)
+    queries = [
+        "SENS:FREQuency:STEP?",
+        "FREQuency:STARt?",
+        "FREQuency:STOP?",
+        "FREQuency:SPAN?",
+        "FREQuency:CENTer?",
+        "SENSe:BANDwidth:RESolution?",
+        "SENS:AVERAGE:COUNT?",
+        "OUTPut:IMPedance?",
+        "INSTRUMENT:SEL?",
+        "INSTRUMENT:NSEL?",
+        "INPUT1:COUPLING?",
+        "INPUT2:COUPLING?",
+        "CALC:X:UNIT:TIME?",
+        #"CALC:X:UNIT:POWER?",
+        "CALC:X:UNIT:FREQ?",
+        "CALC:X:UNIT:CODE?",
+        "CALC:UPHASE:OFFSET?",
+        "CALC:UPHASE:CREF?",
+        "CALC:UNIT:TIME?",
+        "CALC:UNIT:POWER?",
+        "CALC:UNIT:FREQ?",
+        "CALC:UNIT:ANGLE?",
+        "CALC:UNIT:AM?",
+        "CALC:DATA:HEAD:POINTS?",
+        "CALC:FORMAT?"
+    ]
+    gpib = setup_gpib(ip)
+    #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % (duration, freq))
+
+    resps = []
+    for query in queries:
+        print(query)
+        sleep(0.1)
+        try:
+            value = gpib.query(query).strip()
+        except Exception as e:
+            print(e)
+            raise
+        resps.append(value)
+    delim=','
+    data = gpib.read_data().strip().strip(delim).split(delim)
+
+    with open(name + ".dat", 'w') as f:
+        f.write(f"# file_name: {name}\n")
+        f.write(f"# date: {datetime.datetime.now().date()}\n")
+        f.write(f"# time: {datetime.datetime.now().time()}\n")
+        for query, value in zip(queries, resps):
+            f.write(f"# {query}: {value}\n")
+        f.write("\n".join([str(pt) for pt in data]))
+    plot(name)
+    print(name)
+    gpib.close()
+    return None
+
+
+
+'''
