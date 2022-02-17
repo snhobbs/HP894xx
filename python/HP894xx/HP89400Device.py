@@ -40,7 +40,7 @@ def ReadStatusCode(response):
 from time import sleep
 from timeout_decorator import timeout, TimeoutError
 from plx_gpib_ethernet import PrologixGPIBEthernetDevice
-_log = None
+_log = logging.getLogger()
 test=False
 
 '''
@@ -61,15 +61,15 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.freq_span = None
 
     def __enter__(self):
-        print("Open Socket", time.time())
+        _log.debug("Open Socket", time.time())
         self.connect()
-        print("Socket Opened", time.time())
+        _log.debug("Socket Opened", time.time())
         return self
 
     def __exit__(self, *args, **kwargs):
-        print("Close Socket", time.time())
+        _log.debug("Close Socket", time.time())
         self.close()
-        print("Socket Closed ", time.time())
+        _log.debug("Socket Closed ", time.time())
 
     @classmethod
     def get_error_code(cls, error):
@@ -81,7 +81,7 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         self.connect()
 
     def write(self, *args, **kwargs):
-        print(*args, **kwargs)
+        _log.debug(*args, **kwargs)
         super().write(*args, **kwargs)
         #error = self.read_errors()
         #if(self.get_error_code(error) != 0):
@@ -89,7 +89,7 @@ class HP89400Device(PrologixGPIBEthernetDevice):
         #    assert(self.get_error_code(error) == 0)
         #return resp
     def query(self, *args, **kwargs):
-        print(*args, **kwargs)
+        _log.debug(*args, **kwargs)
         return super().query(*args, **kwargs)
 
     def read_error_code(self):
@@ -204,7 +204,7 @@ class HP89400Device(PrologixGPIBEthernetDevice):
                     data.extend(self.read())
                     sleep(0.1)
                 except Exception as e:
-                    print(e, i)
+                    _log.debug(e, i)
                     break
         delim=','
         d = "".join(data).strip().strip(delim).split(delim)
@@ -252,12 +252,12 @@ def data_run(ip, name):
 
     resps = []
     for query in queries:
-        print(query)
+        _log.debug(query)
         sleep(0.1)
         try:
             value = gpib.query(query).strip()
         except Exception as e:
-            print(e)
+            _log.debug(e)
             raise
         resps.append(value)
     delim=','
@@ -271,7 +271,7 @@ def data_run(ip, name):
             f.write(f"# {query}: {value}\n")
         f.write("\n".join([str(pt) for pt in data]))
     plot(name)
-    print(name)
+    _log.debug(name)
     gpib.close()
     return None
 
