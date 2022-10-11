@@ -19,6 +19,6 @@ setup(name='HP894xx',
       ],
       test_suite='nose.collector',
       tests_require=['nose'],
-      scripts=["bin/"],
+      scripts=["bin/hp_spectrum_analyzer.py"],
       include_package_data=True,
       zip_safe=True)
