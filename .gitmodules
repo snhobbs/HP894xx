@@ -1,0 +1,3 @@
+[submodule "HP89410A"]
+	path = HP89410A
+	url = git@github.com:snhobbs/HP89410A.git
