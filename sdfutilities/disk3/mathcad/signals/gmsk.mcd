@@ -1,0 +1,538 @@
+.MCAD 302010000 1 74
+.CMD PLOTFORMAT
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 21 15 0
+.CMD FORMAT  rd=d ct=10 im=j et=3 zt=15 pr=3 mass length time charge temperature tr=0
+.CMD SET ORIGIN 0
+.CMD SET TOL 0.000010000000000
+.CMD SET PRNCOLWIDTH 8
+.CMD SET PRNPRECISION 10
+.CMD PRINT_SETUP 1.200000 0
+.CMD DEFINE_FONTSTYLE_NAME fontID=0 name=Variables
+.CMD DEFINE_FONTSTYLE_NAME fontID=1 name=Constants
+.CMD DEFINE_FONTSTYLE_NAME fontID=2 name=Text
+.CMD DEFINE_FONTSTYLE_NAME fontID=4 name=User^1
+.CMD DEFINE_FONTSTYLE_NAME fontID=5 name=User^2
+.CMD DEFINE_FONTSTYLE_NAME fontID=6 name=User^3
+.CMD DEFINE_FONTSTYLE_NAME fontID=7 name=User^4
+.CMD DEFINE_FONTSTYLE_NAME fontID=8 name=User^5
+.CMD DEFINE_FONTSTYLE_NAME fontID=9 name=User^6
+.CMD DEFINE_FONTSTYLE_NAME fontID=10 name=User^7
+.CMD DEFINE_FONTSTYLE fontID=0 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=1 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=2 family=Helv points=12 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=4 family=Helv points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=5 family=Courier points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=6 family=System points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=7 family=Script points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=8 family=Roman points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=9 family=Modern points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=10 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD UNITS U=1
+.TXT 2 2 0 0
+Cg a67.625000,72.000000,112
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {This Mathcad file creates a GMSK
+ signal for use with the HP894x0A source.\par 
+\par These  variables can be adjusted}}
+}
+.TXT 8 52 0 0
+Cg a16.250000,20.000000,40
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {\fs20 Aug 10, 1993\par signals\\gmsk.mcd}}
+}
+.EQN 2 -51 0 0
+{0:BT}NAME:0.3
+.TXT 0 23 0 0
+Cg a7.000000,48.000000,12
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Filter BT}}
+}
+.EQN 4 -23 0 0
+{0:widthInSymbols}NAME:4
+.TXT 0 23 0 0
+Cg a9.125000,48.000000,15
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Filter width}}
+}
+.EQN 5 -23 0 0
+{0:ptsPerSymbol}NAME:12
+.TXT 0 23 0 0
+Cg a23.500000,48.000000,13
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Result PPS}}
+}
+.EQN 4 -23 0 0
+{0:T}NAME:(1)/(250000)
+.TXT 1 23 0 0
+Cg a18.875000,48.000000,16
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Symbol period}}
+}
+.EQN 5 -23 0 0
+{0:transitionWidth}NAME:2
+.TXT 0 23 0 0
+Cg a23.625000,48.000000,32
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Pulse on/off transition width}}
+}
+.EQN 4 -23 0 0
+{0:pulseWidth}NAME:152
+.TXT 0 23 0 0
+Cg a24.750000,48.000000,31
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {3dB pulse width (in symbols)}}
+}
+.EQN 4 -23 0 0
+{0:\a}NAME:.0
+.TXT 0 23 0 0
+Cg a15.875000,48.000000,20
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {IQ gain Imbalance}}
+}
+.EQN 4 -23 0 0
+{0:originOffset}NAME:.01
+.TXT 0 23 0 0
+Cg a16.500000,48.000000,21
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Origin Offset =}{ }}
+}
+.EQN 0 14 0 0
+20*{0:log}NAME({0:originOffset}NAME)=?_n_u_l_l_
+.TXT 0 20 0 0
+Cg a2.375000,9.000000,5
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {dB}}
+}
+.TXT 3 -58 0 0
+Cg a65.625000,71.000000,108
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {---------------------------------------------------------------------------------------------------------}}
+}
+.EQN 3 1 0 0
+{0:numSyms}NAME:{0:pulseWidth}NAME+2*{0:widthInSymbols}NAME
+.EQN 4 0 0 0
+{0:numPts}NAME:{0:ptsPerSymbol}NAME*{0:widthInSymbols}NAME+1
+.EQN 0 35 0 0
+{0:lastFiltIndex}NAME:{0:numPts}NAME-1
+.EQN 4 -35 0 0
+{0:i}NAME:0;{0:lastFiltIndex}NAME
+.EQN 0 18 0 0
+{0:numPts}NAME=?_n_u_l_l_
+.TXT 5 -20 0 0
+Cg a24.375000,71.000000,31
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Create the time index vector}}
+}
+.EQN 5 1 0 0
+({0:t}NAME)[({0:i}NAME):{0:T}NAME*((1)/({0:ptsPerSymbol}NAME)*{0:i}NAME-({0:widthInSymbols}NAME)/(2))
+.TXT 6 0 0 0
+Cg a70.000000,70.000000,63
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Compute the impulse response using
+ the direct form equation.}}
+}
+.EQN 7 3 0 0
+{0:\s}NAME:(\({0:ln}NAME(2)))/(2*{0:\p}NAME*{0:BT}NAME)
+.EQN 14 -3 0 0
+{0:g}NAME({0:t}NAME):(1)/(\(2*{0:\p}NAME)*{0:\s}NAME*{0:T}NAME)*({0:t}NAME-({0:T}NAME)/(2)&{0:t}NAME+({0:T}NAME)/(2)`({0:e}NAME)^((-({0:\t}NAME)^(2))/(2*({0:\s}NAME)^(2)*({0:T}NAME)^(2)))&{0:\t}NAME)
+.EQN 10 1 0 0
+({0:g}NAME)[({0:i}NAME):{0:g}NAME(({0:t}NAME)[({0:i}NAME))
+.EQN 2 -2 0 0
+&&({0:g}NAME)[({0:i}NAME)@&&(({0:t}NAME)[({0:i}NAME))/({0:T}NAME)
+0 1 1 0 0
+0 1 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 59 11 0
+.TXT 26 5 0 0
+Cg a21.375000,68.000000,28
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Generate the digital data}}
+}
+.EQN 3 -2 0 0
+{0:numSymsWithSettle}NAME:{0:numSyms}NAME+{0:widthInSymbols}NAME+{0:transitionWidth}NAME
+.EQN 4 0 0 0
+{0:n}NAME:0;{0:numSymsWithSettle}NAME
+.EQN 4 0 0 0
+{0:i}NAME:0;{0:numSymsWithSettle}NAME*{0:ptsPerSymbol}NAME-1
+.EQN 4 0 0 0
+({0:x}NAME)[({0:n}NAME):(({0:rnd}NAME(1)>.5)*2-1)
+.TXT 0 22 0 0
+Cg a32.000000,48.000000,39
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Generate random sequence of \{-1,1\}}}
+}
+.TXT 5 0 0 0
+Cg a27.125000,48.000000,36
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Fill frequency vector with zeros.}}
+}
+.EQN 1 -22 0 0
+({0:\Y}NAME)[({0:i}NAME):0
+.EQN 6 0 0 0
+({0:\Y}NAME)[({0:n}NAME*{0:ptsPerSymbol}NAME):({0:x}NAME)[({0:n}NAME)*({0:\p}NAME)/(2)*(1)/({0:ptsPerSymbol}NAME)
+.TXT 0 28 0 0
+Cg a32.625000,42.000000,41
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Interleave with scaled data (impulses)}}
+}
+.TXT 7 5 0 0
+Cg a33.500000,42.000000,41
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Equation to compute filtered frequency}}
+}
+.EQN 1 -32 0 0
+{0:\y}NAME({0:t}NAME):((0,{0:numPts}NAME-1,{0:j}NAME,({0:\Y}NAME)[({0:t}NAME+{0:j}NAME)*({0:g}NAME)[({0:lastFiltIndex}NAME-{0:j}NAME)){64})
+.EQN 7 0 0 0
+{0:t}NAME:0;({0:numSyms}NAME+{0:transitionWidth}NAME)*{0:ptsPerSymbol}NAME-1
+.EQN 4 0 0 0
+({0:\y}NAME)[({0:t}NAME):{0:\y}NAME({0:t}NAME)
+.TXT 0 27 0 0
+Cg a29.375000,42.000000,36
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Compute filtered frequency vector}}
+}
+.EQN 6 -27 0 0
+{0:\q}NAME({0:m}NAME):((0,{0:m}NAME,{0:j}NAME,({0:\y}NAME)[({0:j}NAME)){64})
+.TXT 1 25 0 0
+Cg a42.875000,43.000000,90
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Use summation to a}{pproximate 
+integral of frequency vector  and generate
+ phase vector}}
+}
+.EQN 6 -25 0 0
+({0:\q}NAME)[({0:t}NAME):{0:\q}NAME({0:t}NAME)
+.TXT 3 25 0 0
+Cg a16.500000,44.000000,21
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Frequency vs. time}}
+}
+.EQN 1 -27 0 0
+&&({0:\y}NAME)[({0:t}NAME)@&&({0:t}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 55 16 0
+.TXT 28 23 0 0
+Cg a12.750000,48.000000,17
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Phase vs. time}}
+}
+.EQN 2 -22 0 0
+&&({0:\q}NAME)[({0:t}NAME)@&&({0:t}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 57 19 0
+.TXT 32 -1 0 0
+Cg a45.375000,71.000000,54
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Create a pulse amplitude weighting
+ function (mask).}}
+}
+.EQN 6 0 0 0
+{0:offPeriod}NAME:({0:numSyms}NAME-{0:pulseWidth}NAME)/(2)*{0:ptsPerSymbol}NAME
+.EQN 5 0 0 0
+({0:rectMask}NAME)[({0:t}NAME):({0:t}NAME>{0:offPeriod}NAME)*({0:t}NAME<{0:numSyms}NAME*{0:ptsPerSymbol}NAME-{0:offPeriod}NAME)
+.EQN 4 0 0 0
+{0:mtr}NAME:0;{0:transitionWidth}NAME*{0:ptsPerSymbol}NAME-1
+.EQN 5 0 0 0
+({0:\f}NAME)[({0:mtr}NAME):({0:mtr}NAME)/({0:transitionWidth}NAME*{0:ptsPerSymbol}NAME)*2*{0:\p}NAME
+.EQN 7 0 0 0
+({0:hanning}NAME)[({0:mtr}NAME):((1)/(2)+(1)/(2)*{0:cos}NAME(({0:\f}NAME)[({0:mtr}NAME)-{0:\p}NAME))*(2)/({0:transitionWidth}NAME*{0:ptsPerSymbol}NAME)
+.EQN 7 0 0 0
+{0:m}NAME:0;{0:numSyms}NAME*{0:ptsPerSymbol}NAME-1
+.EQN 5 0 0 0
+({0:ampMask}NAME)[({0:m}NAME):{0:mtr}NAME$({0:rectMask}NAME)[({0:m}NAME+{0:mtr}NAME)*({0:hanning}NAME)[({0:mtr}NAME)
+.EQN 7 0 0 0
+&&({0:ampMask}NAME)[({0:m}NAME)@{0:numSyms}NAME&&({0:m}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 1 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 53 15 0
+.EQN 31 5 0 0
+{0:x1}NAME:{0:widthInSymbols}NAME-{0:transitionWidth}NAME
+.EQN 0 29 0 0
+{0:x2}NAME:{0:widthInSymbols}NAME
+.EQN 4 -29 0 0
+{0:x3}NAME:{0:x1}NAME+{0:pulseWidth}NAME
+.EQN 0 29 0 0
+{0:x4}NAME:{0:x2}NAME+{0:pulseWidth}NAME
+.EQN 2 -33 0 0
+&&({0:ampMask}NAME)[({0:m}NAME)@{0:x2}NAME&{0:x1}NAME&({0:m}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 1 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 19 15 0
+.EQN 0 36 0 0
+&&({0:ampMask}NAME)[({0:m}NAME)@{0:x4}NAME&{0:x3}NAME&({0:m}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 1 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 18 15 0
+.TXT 45 -39 0 0
+Cg a47.500000,70.000000,58
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Convert the phase trajectory into
+ a complex time signal}}
+}
+.EQN 5 1 0 0
+({0:sig}NAME)[({0:m}NAME,0):({0:cos}NAME(({0:\q}NAME)[({0:m}NAME))*(1+{0:\a}NAME)+({0:originOffset}NAME)/(\(2)))*({0:ampMask}NAME)[({0:m}NAME)
+.EQN 6 0 0 0
+({0:sig}NAME)[({0:m}NAME,1):({0:sin}NAME(({0:\q}NAME)[({0:m}NAME))*(1-{0:\a}NAME)+({0:originOffset}NAME)/(\(2)))*({0:ampMask}NAME)[({0:m}NAME)
+.EQN 5 0 0 0
+({0:mag}NAME)[({0:m}NAME):10*{0:log}NAME(((({0:sig}NAME)[({0:m}NAME,0)))^(2)+((({0:sig}NAME)[({0:m}NAME,1)))^(2)+(10)^(-8))
+.EQN 7 0 0 0
+&&({0:mag}NAME)[({0:m}NAME)@&&({0:m}NAME)/({0:ptsPerSymbol}NAME)
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 59 27 0
+.TXT 41 0 0 0
+Cg a71.875000,72.000000,92
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Write the complex result to a file.
+  Set variables PRNPRECISION = 16 and PRNCOLWIDTH
+ =20}}
+}
+.EQN 6 0 0 0
+{0:WRITEPRN}NAME({0:outFile}NAME):{0:sig}NAME
+.TXT 5 1 0 0
+Cg a71.000000,71.000000,361
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Before the output file can be played
+ out the source, the file must be converted
+ from ASCII format to SDF format.  This 
+is done outside of Mathcad using the SDF
+ utility program 'asctosdf'.  The program
+ will require two command-line options to
+ set the appropriate source sample frequency
+ and center frequency.  The values that 
+will be used are shown below.}}
+}
+.EQN 13 -1 0 0
+{0:samplePeriod}NAME:({0:T}NAME)/({0:ptsPerSymbol}NAME)
+.EQN 6 0 0 0
+{0:samplePeriod}NAME={18998}?_n_u_l_l_
+.EQN 0 26 0 0
+{0:centerFreq}NAME:900*(10)^(6)
+.TXT 9 -27 0 0
+Cg a69.000000,69.000000,376
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {The syntax for the SDF utility 
+program is shown below.  Substitute numbers
+ for  samplePeriod and centerFreq.\par \par 
+              c:>asctosdf outfile.prn /X:0,samplePeriod
+ /Z:centerFreq result.dat\par \par For example
+ to convert the ASCII file outfile.prn to
+ the SDF file gmsk.dat use:    \par \par 
+             }{\b  }{\b0 c:>asctosdf  outfile.prn
+  /X:0,3.076923e-7   /Z:800e+6  gmsk.dat}}
+}

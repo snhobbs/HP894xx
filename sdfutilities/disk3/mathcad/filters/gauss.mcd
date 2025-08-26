@@ -1,0 +1,156 @@
+.MCAD 302010000 1 74
+.CMD PLOTFORMAT
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 21 15 0
+.CMD FORMAT  rd=d ct=10 im=j et=3 zt=15 pr=3 mass length time charge temperature tr=0
+.CMD SET ORIGIN 0
+.CMD SET TOL 0.000000000100000
+.CMD SET PRNCOLWIDTH 20
+.CMD SET PRNPRECISION 16
+.CMD PRINT_SETUP 1.200000 0
+.CMD DEFINE_FONTSTYLE_NAME fontID=0 name=Variables
+.CMD DEFINE_FONTSTYLE_NAME fontID=1 name=Constants
+.CMD DEFINE_FONTSTYLE_NAME fontID=2 name=Text
+.CMD DEFINE_FONTSTYLE_NAME fontID=4 name=User^1
+.CMD DEFINE_FONTSTYLE_NAME fontID=5 name=User^2
+.CMD DEFINE_FONTSTYLE_NAME fontID=6 name=User^3
+.CMD DEFINE_FONTSTYLE_NAME fontID=7 name=User^4
+.CMD DEFINE_FONTSTYLE_NAME fontID=8 name=User^5
+.CMD DEFINE_FONTSTYLE_NAME fontID=9 name=User^6
+.CMD DEFINE_FONTSTYLE_NAME fontID=10 name=User^7
+.CMD DEFINE_FONTSTYLE fontID=0 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=1 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=2 family=Helv points=12 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=4 family=Helv points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=5 family=Courier points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=6 family=System points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=7 family=Script points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=8 family=Roman points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=9 family=Modern points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=10 family=Tms^Rmn points=10 bold=0 italic=0 underline=0
+.CMD UNITS U=1
+.TXT 2 2 0 0
+Cg a67.625000,72.000000,111
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {This Mathcad file creates a Gaussian
+ filter for use with the HP894x0A\par \par 
+These two variables can be adjusted}}
+}
+.TXT 7 52 0 0
+Cg a15.750000,20.000000,45
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {\par }{\fs20 Jul 29, 1993\par filters\\gauss.mcd}}
+}
+.EQN 1 -51 0 0
+{0:BT}NAME:3
+.EQN 0 10 0 0
+{0:widthInSymbols}NAME:6
+.TXT 5 -11 0 0
+Cg a34.500000,72.000000,40
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {These variables should not be changed}}
+}
+.EQN 3 1 0 0
+{0:ptsPerSymbol}NAME:20
+.EQN 0 19 0 0
+{0:T}NAME:1
+.EQN 4 -19 0 0
+{0:numPts}NAME:{0:ptsPerSymbol}NAME*{0:widthInSymbols}NAME+1
+.EQN 4 0 0 0
+{0:i}NAME:0;{0:numPts}NAME-1
+.EQN 0 18 0 0
+{0:numPts}NAME=?_n_u_l_l_
+.TXT 4 -18 0 0
+Cg a24.375000,71.000000,31
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Create the time index vector}}
+}
+.EQN 5 0 0 0
+({0:t}NAME)[({0:i}NAME):{0:T}NAME*((1)/({0:ptsPerSymbol}NAME)*{0:i}NAME-({0:widthInSymbols}NAME)/(2))
+.TXT 6 0 0 0
+Cg a70.000000,70.000000,63
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Compute the impulse response using
+ the direct form equation.}}
+}
+.EQN 7 1 0 0
+{0:\s}NAME:(\({0:ln}NAME(2)))/(2*{0:\p}NAME*{0:BT}NAME)
+.EQN 13 -1 0 0
+{0:g}NAME({0:t}NAME):(1)/(\(2*{0:\p}NAME)*{0:\s}NAME*{0:T}NAME)*({0:t}NAME-({0:T}NAME)/(2)&{0:t}NAME+({0:T}NAME)/(2)`({0:e}NAME)^((-({0:\t}NAME)^(2))/(2*({0:\s}NAME)^(2)*({0:T}NAME)^(2)))&{0:\t}NAME)
+.EQN 10 1 0 0
+({0:g}NAME)[({0:i}NAME):{0:g}NAME(({0:t}NAME)[({0:i}NAME))
+.EQN 4 -2 0 0
+&&({0:g}NAME)[({0:i}NAME)@&&({0:t}NAME)[({0:i}NAME)
+0 1 1 0 0
+0 1 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 60 16 0
+.TXT 29 2 0 0
+Cg a64.500000,71.000000,79
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Write the result to a file  (Built-in
+ variable PRNPRECISION should be >= 10)}}
+}
+.EQN 3 0 0 0
+{0:WRITEPRN}NAME({0:outFile}NAME):({0:g}NAME)[({0:i}NAME)
+.TXT 7 -1 0 0
+Cg a70.750000,71.000000,166
+{\rtf1\ansi \deff0
+{\fonttbl
+{\f0\fnil Helv;}
+}
+{\plain {Convert the resulting output from
+ ASCII format to SDF format.  This is done
+ with the program 'asctosdf'.    For example:\par 
+\par      c:>asctosdf outfile.prn gauss.dat}}
+}

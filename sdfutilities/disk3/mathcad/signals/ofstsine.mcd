@@ -1,0 +1,182 @@
+.MCAD 302010000 1 74
+.CMD PLOTFORMAT
+0 0 1 0 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 21 15 0
+.CMD FORMAT  rd=d ct=10 im=i et=3 zt=15 pr=3 mass length time charge temperature tr=0
+.CMD SET ORIGIN 0
+.CMD SET TOL 0.000000100000000
+.CMD SET PRNCOLWIDTH 20
+.CMD SET PRNPRECISION 10
+.CMD PRINT_SETUP 1.200000 0
+.CMD DEFINE_FONTSTYLE_NAME fontID=0 name=Variables
+.CMD DEFINE_FONTSTYLE_NAME fontID=1 name=Constants
+.CMD DEFINE_FONTSTYLE_NAME fontID=2 name=Text
+.CMD DEFINE_FONTSTYLE_NAME fontID=4 name=User^1
+.CMD DEFINE_FONTSTYLE_NAME fontID=5 name=User^2
+.CMD DEFINE_FONTSTYLE_NAME fontID=6 name=User^3
+.CMD DEFINE_FONTSTYLE_NAME fontID=7 name=User^4
+.CMD DEFINE_FONTSTYLE_NAME fontID=8 name=User^5
+.CMD DEFINE_FONTSTYLE_NAME fontID=9 name=User^6
+.CMD DEFINE_FONTSTYLE_NAME fontID=10 name=User^7
+.CMD DEFINE_FONTSTYLE fontID=0 family=Times^New^Roman points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=1 family=Times^New^Roman points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=2 family=Arial points=12 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=4 family=Arial points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=5 family=Courier^New points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=6 family=System points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=7 family=Script points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=8 family=Roman points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=9 family=Modern points=10 bold=0 italic=0 underline=0
+.CMD DEFINE_FONTSTYLE fontID=10 family=Times^New^Roman points=10 bold=0 italic=0 underline=0
+.CMD UNITS U=1
+.TXT 2 1 0 0
+Cg a72.625000,73.000000,162
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {This Mathcad file creates a complex
+ time waveform for use in the HP894x0A source.
+  This example creates a sinewave that is
+ offset from the center frequency.\par }}
+}
+.EQN 7 0 0 0
+{0:f.offset}NAME:1000
+.EQN 5 0 0 0
+{0:F.samp}NAME:1.28*(10)^(5)
+.TXT 0 18 0 0
+Cg a49.375000,55.000000,98
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {The sampling frequency should be
+ at least 1.28 time the\par bandwidth of
+ the signal being created.}}
+}
+.EQN 7 -18 0 0
+{0:dt}NAME:(1)/({0:F.samp}NAME)
+.EQN 0 11 0 0
+{0:dt}NAME={18999}?_n_u_l_l_
+.TXT 0 15 0 0
+Cg a46.375000,47.000000,66
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {This number will be used later 
+ in the ASCII to SDF conversion}}
+}
+.EQN 6 -26 0 0
+{0:numPts}NAME:2048
+.EQN 4 0 0 0
+{0:n}NAME:0;{0:numPts}NAME-1
+.TXT 1 50 0 0
+Cg a19.625000,23.000000,52
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {\fs20 Aug }{\fs20 29, 1993\par 
+signals\\ofstsine.mcd}}
+}
+.EQN 4 -50 0 0
+({0:\q}NAME)[({0:n}NAME):2*{0:\p}NAME*{0:f.offset}NAME*({0:n}NAME*{0:dt}NAME)
+.TXT 5 0 0 0
+Cg a30.875000,73.000000,39
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {Create the real part of the waveform}}
+}
+.EQN 3 0 0 0
+({0:x}NAME)[({0:n}NAME,0):{0:cos}NAME(({0:\q}NAME)[({0:n}NAME))
+.TXT 6 0 0 0
+Cg a63.875000,73.000000,46
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {Create the imaginary part of the
+ waveform. }}
+}
+.EQN 3 0 0 0
+({0:x}NAME)[({0:n}NAME,1):{0:sin}NAME(({0:\q}NAME)[({0:n}NAME))
+.EQN 4 1 0 0
+&&({0:x}NAME)[({0:n}NAME,0),({0:x}NAME)[({0:n}NAME,1)@&&{0:n}NAME
+0 0 1 1 0
+0 0 1 0 0
+0 1 0 0 NO-TRACE-STRING
+0 2 1 0 NO-TRACE-STRING
+0 3 2 0 NO-TRACE-STRING
+0 4 3 0 NO-TRACE-STRING
+0 1 4 0 NO-TRACE-STRING
+0 2 5 0 NO-TRACE-STRING
+0 3 6 0 NO-TRACE-STRING
+0 4 0 0 NO-TRACE-STRING
+0 1 1 0 NO-TRACE-STRING
+0 2 2 0 NO-TRACE-STRING
+0 3 3 0 NO-TRACE-STRING
+0 4 4 0 NO-TRACE-STRING
+0 1 5 0 NO-TRACE-STRING
+0 2 6 0 NO-TRACE-STRING
+0 3 0 0 NO-TRACE-STRING
+0 4 1 0 NO-TRACE-STRING
+0 1 59 19 0
+.TXT 29 0 0 0
+Cg a72.875000,73.000000,177
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {Send the matrix to a file.   Make
+ sure that the built-in variables such as
+ PRNCOLWIDTH are properly set up.  PRNCOLWIDTH
+ should be at least 20 and PRNPRECISION 
+at least 10.}}
+}
+.EQN 8 0 0 0
+{0:WRITEPRN}NAME({0:outFile}NAME):{0:x}NAME
+.TXT 5 0 0 0
+Cg a73.000000,73.000000,419
+{\rtf1\ansi \deff1
+{\fonttbl
+{\f0\fnil Helv;}
+{\f1\fnil Arial;}
+}
+{\plain {Once this file is written it can
+ be converted from ASCII format to SDF format.
+  The SDF file can then be read directly
+ into the instrument.  To perform the conversion
+ \par run the DOS program 'asctosdf' as 
+follows  (substitute numbers for deltaT 
+and centerFreq).  \par \par         asctosdf
+  outfile.prn  sine.dat  /X:0,deltaT  /Z:centerFreq\par 
+\par For example:\par \par         asctosdf
+ outfile.prn sine.dat /X:0,7.8125e-6 /Z:901e+6}}
+}
